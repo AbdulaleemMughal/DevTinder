@@ -1,22 +1,61 @@
 const express = require("express");
 const connectDataBase = require("./config/database");
 const User = require("./models/user");
+const { signUpValidation } = require("./utils/signUpValidation");
+const bcrypt = require("bcrypt");
 
 const app = express();
 
 app.use(express.json()); // to parse json request
 
+// Api for signing up the users.
 app.post("/signup", async (req, res) => {
-  // console.log(req.body);  res.body contains all the data that is written in the body sessiojn of the postman
-
-  const user = new User(req.body);
-
   try {
+    // console.log(req.body);  res.body contains all the data that is written in the body sessiojn of the postman
+
+    const { firstName, lastName, emailId, password } = req.body;
+
+    // validate user input
+    signUpValidation(req);
+
+    //Enccrpt the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(hashedPassword);
+
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: hashedPassword,
+    });
+
     await user.save(); // Save user to MongoDB
     res.send("User registered successfully");
   } catch (err) {
     // handling error if occur
-    res.status(400).send("Error saving the User" + err.message);
+    res.status(400).send("Error : " + err.message);
+  }
+});
+
+// Api for logining In the user
+app.post("/login", async (req, res) => {
+  try {
+    const { emailId, password } = req.body;
+
+    const user = await User.findOne({ emailId: emailId });
+    if (!user) {
+      throw new Error("Invalid Credentials");
+    }
+
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
+    if (!isCorrectPassword) {
+      throw new Error("Invalid Credentials");
+    } else {
+      res.send("Login Successful");
+    }
+  } catch (err) {
+    // handling error if occur
+    res.status(400).send("Error : " + err.message);
   }
 });
 
@@ -33,7 +72,6 @@ app.get("/user", async (req, res) => {
 });
 
 // Api for fetching the the arrayof user profile
-
 app.get("/feed", async (req, res) => {
   const userEmail = req.body.emailId;
 
