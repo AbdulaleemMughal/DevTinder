@@ -62,17 +62,35 @@ app.delete("/user", async (req, res) => {
 });
 
 // updating a user from the databse
-app.patch("/user", async (req, res) => {
-  const userId = req.body.userId;
+app.patch("/user/:userId", async (req, res) => {
+  const userId = req.params?.userId;
   const data = req.body;
+
   try {
+    // API Level Validation
+
+    const ALLOWED_UPDATES = ["age", "gender", "skills", "photo", "about"]; // Only these keys from the schema will be allowed to update from the schema
+
+    const isUpdateAllowed = Object.keys(data).every((k) =>
+      ALLOWED_UPDATES.includes(k)
+    );
+
+    if (!isUpdateAllowed) {
+      throw new Error("Invalid updates");
+    }
+
+    // validation for the maximun length forskills array or alsowe canvalidate it into the schema
+    // if(data?.skills.length > 10) {
+    //   throw new Error("Skills array should not have more than 10 elements");
+    // }
+
     await User.findByIdAndUpdate({ _id: userId }, data, {
       returnDocument: "before",
-      runValidators: true // it help us to run the validation on updating any user data
+      runValidators: true, // it help us to run the validation on updating any user data
     });
-    res.send("User Updated Successfully")
+    res.send("User Updated Successfully");
   } catch (err) {
-    res.status(500).send("Something went wrong" + err.message);
+    res.status(500).send("Something went wrong: " + err.message);
   }
 });
 
