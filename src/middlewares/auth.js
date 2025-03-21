@@ -10,6 +10,7 @@ const userAuth = async (req, res, next) => {
     }
 
     const decodedObj = await jwt.verify(token, "DEVTINDER@123");
+    console.log(decodedObj._id);
 
     const { _id } = decodedObj;
 
