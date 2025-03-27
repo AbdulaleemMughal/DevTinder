@@ -12,7 +12,7 @@
 
 ## ConnectionRequestRouter
  - POST /request/send/interested/:userId
- - POST /request/send/ignore/:userId
+ - POST /request/send/ignored/:userId
  - POST /request/reveiw/accepted/:requestId
  - POST /request/reveiw/rejected/:requestId
 
