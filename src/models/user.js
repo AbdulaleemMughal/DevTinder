@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   },
   emailId: {
     type: String,
-    required: true, // the email should not be empty
+    required: true, // The email should not be empty
     unique: true, // the emailId should be unique
     lowercase: true, // convert the email into lowercase
     trim: true, // remove the white spaces from the email only from start and the last
@@ -38,6 +38,7 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
+    required: true,
     validate(value) {
       if (!["male", "female", "other"].includes(value)) {
         throw new Error("Gender should be either 'male', 'female' or 'other'");

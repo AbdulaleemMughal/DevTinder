@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const authRouter = require("./routers/auth");
 const profileRouter = require("./routers/profile");
 const requestRouter = require("./routers/request");
+const userRouter = require("./routers/user");
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(cookieParser()); // middle-ware for parsing cookies
 app.use("/", authRouter); // middle-ware
 app.use("/", profileRouter); // middle-ware
 app.use("/", requestRouter); // middle-ware
+app.use("/", userRouter); // middle-ware
 
 // Connect to the server and the database....
 connectDataBase()
