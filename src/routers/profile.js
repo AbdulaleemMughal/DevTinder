@@ -57,12 +57,10 @@ profileRouter.patch("/profile/password", userAuth, async (req, res) => {
     }
 
     if (!validator.isStrongPassword(newPassword)) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "New password should be strong (min 8 chars, include uppercase, lowercase, number, and symbol).",
-        });
+      return res.status(400).json({
+        message:
+          "New password should be strong (min 8 chars, include uppercase, lowercase, number, and symbol).",
+      });
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);

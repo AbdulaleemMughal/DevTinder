@@ -46,8 +46,6 @@ const userSchema = new mongoose.Schema({
   },
   photo: {
     type: String,
-    default:
-      "https://pinnacle.works/wp-content/uploads/2022/06/dummy-image.jpg", // it store the default value for the attribute
     validate(value) {
       if (!validator.isURL(value)) {
         throw new Error("Invalid Photo URL");
