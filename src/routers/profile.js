@@ -19,7 +19,7 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
   }
 });
 
-profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
+profileRouter.put("/profile/edit", userAuth, async (req, res) => {
   try {
     if (!validateEditProfileData(req)) {
       throw new Error("Invalid data edit");
@@ -37,7 +37,9 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     });
   } catch (err) {
     // handling error if occur
-    res.status(400).send("Error : " + err.message);
+    res.status(400).json({
+      message: "Error Occur while editing"
+    });
   }
 });
 
@@ -47,8 +49,6 @@ profileRouter.patch("/profile/password", userAuth, async (req, res) => {
     const { oldPassword, newPassword } = req.body;
 
     const user = await User.findById(req.user.id);
-
-    console.log(user.password);
 
     const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
 

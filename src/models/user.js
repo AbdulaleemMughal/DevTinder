@@ -34,7 +34,6 @@ const userSchema = new mongoose.Schema({
   },
   age: {
     type: Number,
-    min: 18, // define the minimum age of the user
   },
   gender: {
     type: String,
@@ -54,10 +53,9 @@ const userSchema = new mongoose.Schema({
   },
   about: {
     type: String,
-    default: "This is the default about of the user...",
   },
   skills: {
-    type: [String],
+    type: [Object],
     validate: {
       validator: function (value) {
         return value.length <= 10; // Ensure the array has no more than 10 elements

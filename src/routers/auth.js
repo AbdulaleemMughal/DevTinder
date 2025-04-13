@@ -22,6 +22,11 @@ authRouter.post("/signup", async (req, res) => {
       lastName,
       emailId,
       password: hashedPassword,
+      photo,
+      about,
+      skills,
+      age,
+      gender
     });
 
     await user.save(); // Save user to MongoDB

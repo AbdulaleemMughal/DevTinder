@@ -44,7 +44,9 @@ userRouter.get("/user/connetions", userAuth, async (req, res) => {
         { toUserId: loggedInUser._id, status: "accepted" },
         { fromUserId: loggedInUser._id, status: "accepted" },
       ],
-    }).populate("fromUserId", USER_SAFE_DATA);
+    }).populate("fromUserId toUserId", USER_SAFE_DATA);
+
+    console.log(connectionRequest);
 
     const data = connectionRequest.map((row) => {
       if (row.fromUserId._id.toString() === loggedInUser._id.toString()) {
@@ -54,7 +56,7 @@ userRouter.get("/user/connetions", userAuth, async (req, res) => {
       return row.fromUserId;
     });
 
-    res.json({ message: "Connection Find Successfully!", data });
+    res.json({ message: "Connections Find Successfully!", data });
   } catch (err) {
     res.status(400).json({ message: "Error: " + err.message });
   }
