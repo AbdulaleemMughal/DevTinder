@@ -44,7 +44,7 @@ profileRouter.put("/profile/edit", userAuth, async (req, res) => {
 });
 
 // Api for updating the profile password
-profileRouter.patch("/profile/password", userAuth, async (req, res) => {
+profileRouter.put("/profile/password", userAuth, async (req, res) => {
   try {
     const { oldPassword, newPassword } = req.body;
 

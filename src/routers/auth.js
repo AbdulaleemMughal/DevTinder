@@ -22,15 +22,16 @@ authRouter.post("/signup", async (req, res) => {
       lastName,
       emailId,
       password: hashedPassword,
-      photo,
-      about,
-      skills,
-      age,
-      gender
     });
 
-    await user.save(); // Save user to MongoDB
-    res.send("User registered successfully");
+    const savedUser = await user.save(); // Save user to MongoDB
+    const token = await savedUser.getJWT();
+
+    res.cookie("token", token, {
+      expires: new Date(Date.now() * 7 + 3600000), // expire in 7 hours
+    });
+
+    res.json({ message: "User Register Succesfully", data: savedUser });
   } catch (err) {
     // handling error if occur
     res.status(400).send("Error : " + err.message);
@@ -53,7 +54,7 @@ authRouter.post("/login", async (req, res) => {
       const token = await user.getJWT();
 
       res.cookie("token", token, {
-        expires: new Date(Date.now() + 7 * 3600000), // expire in 7 days
+        expires: new Date(Date.now() + 7 * 3600000), // expire in 7 hours
       });
 
       res.send(user);
